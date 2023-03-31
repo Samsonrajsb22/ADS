@@ -1,0 +1,201 @@
+"""
+Created on Fri Mar 24 17:45:18 2023
+
+@author: Samson Raj Babu Raj - 22013145
+"""
+
+import pandas as pd
+import numpy as np 
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import norm
+
+with open ("C:/Users/hp/Desktop/ADS1/New folder/API_19_DS2.csv") as g:
+    g
+g
+
+API_data1 = pd.read_csv("C:/Users/hp/Desktop/ADS1/New folder/API_19_DS2.csv", index_col = 0, encoding = 'cp1252', header = 4)
+API_data2 = API_data1.replace(np.NaN, 0)
+API_data2
+#API_data3 = API_data2.groupby("Country Code","Country Name")
+
+
+Country_data1 = pd.read_csv("C:/Users/hp/Desktop/ADS1/New folder/Country_API_19_DS2.csv", index_col = 0)
+Country_data1.replace(np.NaN, "None")
+Country_data = Country_data1.drop("Unnamed: 5",axis=1)
+Country_data
+
+Indicator_data1 = pd.read_csv("C:/Users/hp/Desktop/ADS1/New folder/Indicator_API_19_DS2.csv", index_col = 0)
+Indicator_data1.replace(np.NaN, 0)
+Indicator_data = Indicator_data1.drop("Unnamed: 4", axis=1)
+Indicator_data
+
+
+#print(API_data2.columns)
+#print(Country_data)
+#print(Indicator_data.columns)
+#print(API_Cou.columns)
+
+API_Cou = API_data1.merge(Country_data, left_on = "Country Name", right_on = "TableName" , how= "left", suffixes = ("_API","_Country")) 
+API_Cou
+
+API_Cou_Indic = API_Cou.merge(Indicator_data, left_on = "Indicator Name" ,right_on = "INDICATOR_NAME", how = "right" ,suffixes=("_API_Cou","_Indic" ))
+API_Cou_Indic
+
+Merged_data = API_Cou_Indic[["Country Code", "TableName", "Indicator Name", "Indicator Code","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021"]]
+Merged_data
+
+options = ("SP.POP.TOTL", "SE.ENR.PRSC.FM.ZS")
+Pop_Edu = Merged_data[Merged_data["Indicator Code"].isin(options)]
+#Pop_Edu = Pop_Edu.set_index(["TableName", "Country Code","Indicator Code"])
+
+Pop_Ed_Pop_ttl = Pop_Edu[Pop_Edu["Indicator Code"] == "SP.POP.TOTL"]
+Pop_Ed_Sch_ttl = Pop_Edu[Pop_Edu["Indicator Code"] == "SE.ENR.PRSC.FM.ZS"]
+
+Pop_Edu['Pop_sum'] = Pop_Ed_Pop_ttl['2010'] + Pop_Ed_Pop_ttl['2011'] + Pop_Ed_Pop_ttl['2012'] + Pop_Ed_Pop_ttl['2013'] + Pop_Ed_Pop_ttl['2014'] + Pop_Ed_Pop_ttl['2015'] + Pop_Ed_Pop_ttl['2016'] + Pop_Ed_Pop_ttl['2017'] + Pop_Ed_Pop_ttl['2018'] + Pop_Ed_Pop_ttl['2019'] + Pop_Ed_Pop_ttl['2020'] + Pop_Ed_Pop_ttl['2021']
+Pop_Edu['Edu_sum'] = Pop_Ed_Pop_ttl['2010'] + Pop_Ed_Pop_ttl['2011'] + Pop_Ed_Pop_ttl['2012'] + Pop_Ed_Pop_ttl['2013'] + Pop_Ed_Pop_ttl['2014'] + Pop_Ed_Pop_ttl['2015'] + Pop_Ed_Pop_ttl['2016'] + Pop_Ed_Pop_ttl['2017'] + Pop_Ed_Pop_ttl['2018'] + Pop_Ed_Pop_ttl['2019'] + Pop_Ed_Pop_ttl['2020'] + Pop_Ed_Pop_ttl['2021']
+Pop_Edu.sort_values(by = ['Pop_sum'], ascending = True)
+Pop_Edu
+
+
+#Year = Pop_Edu[Pop_Edu['2010']]
+#Year
+#plt.plot(([Canada['2010'],Canada['2011'],Canada['2012'],Canada['2013'],Canada['2014'],Canada['2015'],Canada['2016'],Canada['2017'],Canada['2018'],Canada['2019'],Canada['2020'],Canada['2021']), Pop_Edu['Pop_sum'])
+#plt.plot(x = Canada , y =Year)
+# plt.xlabel('Canada')
+# plt.ylabel('Year')
+# plt.show()
+#Pop_Edu['2011'].corr(Pop_Edu['2013'])
+
+#Pop_Edu.('Pop_sum')
+#plt.show()
+#Pop_Edu.groupby(["TableName","Indicator Code"])[["2010"]].sum()
+
+#a = Pop_Edu.groupby(["TableName", "Country Code","Indicator Name","Indicator Code"])["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021"].mean()
+#a
+
+AF = Pop_Edu[Pop_Edu['TableName'] == 'Afghanistan']
+AF
+AF_pop_sum = AF[AF['Indicator Code'] == "SP.POP.TOTL"]
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+Pop_data = AF_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+Pop_data
+
+AFG_df = Pop_data.T
+AFG_df = AFG_df.rename_axis("YEAR")
+AFG_df
+Afghanistan = AFG_df.rename(columns = {800: "Afghanistan"})
+Afghanistan
+
+# AF_pop_sum.columns
+# Pop_data.columns
+
+
+
+
+CA = Pop_Edu[Pop_Edu['TableName'] == 'Canada']
+CA
+CA_pop_sum = CA[CA['Indicator Code'] == "SP.POP.TOTL"]
+CA_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+CAPop_data = CA_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+CAPop_data
+
+CA_df = CAPop_data.T
+CA_df = CA_df.rename_axis("YEAR")
+CA_df
+Canada=CA_df.rename(columns = {833: "Canada"})
+Canada
+
+
+
+CH = Pop_Edu[Pop_Edu['TableName'] == 'China']
+CH
+CH_pop_sum = CH[CH['Indicator Code'] == "SP.POP.TOTL"]
+CH_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+CHPop_data = CH_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+CHPop_data
+
+CH_df = CHPop_data.T
+CH_df = CH_df.rename_axis("YEAR")
+CH_df
+China=CH_df.rename(columns = {838: "China"})
+China
+
+
+
+AW = Pop_Edu[Pop_Edu['TableName'] == 'Arab World']
+AW
+AW_pop_sum = AW[AW['Indicator Code'] == "SP.POP.TOTL"]
+AW_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+AWPop_data = AW_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+AWPop_data
+
+AW_df = AWPop_data.T
+AW_df = AW_df.rename_axis("YEAR")
+AW_df
+Arabia=AW_df.rename(columns = {805: "Arabia"})
+Arabia
+
+
+SW = Pop_Edu[Pop_Edu['TableName'] == 'Sweden']
+SW
+SW_pop_sum = SW[SW['Indicator Code'] == "SP.POP.TOTL"]
+SW_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+SWPop_data = SW_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+SWPop_data
+
+SW_df = SWPop_data.T
+SW_df = SW_df.rename_axis("YEAR")
+SW_df
+Sweden=SW_df.rename(columns = {1021: "Sweden"})
+Sweden
+
+
+Afghanistan
+Canada
+# China
+# Arabia
+# Sweden
+
+Merged_data = Afghanistan.merge(Canada, how="outer", on="YEAR") \
+              .merge(China, how="outer", on="YEAR") \
+              .merge(Arabia, how="outer", on="YEAR") \
+              .merge(Sweden, how="outer", on="YEAR")
+Merged_data
+
+
+
+#Line Plot
+
+# Merged_data.plot(x = 'YEAR', y=['Afghanistan','Canada','China','Arabia','Sweden'], kind = 'line')
+# plt.legend()
+
+# fig, kp = plt.subplots()
+# for country in Merged_data.columns:
+#     kp.plot(Merged_data.index, Merged_data[country], label=country)
+# kp.set_ylabel('Population in Millions')
+# kp.set_xlabel('Year')
+# kp.legend()
+# plt.show()
+
+
+
+
+
+
+## Bar Plot
+
+fig, cc = plt.subplots()
+cc.bar(Merged_data.index, Merged_data['Afghanistan'], label='Afghanistan')
+cc.bar(Merged_data.index, Merged_data['Canada'], bottom=Merged_data['Afghanistan'], label='Canada')
+cc.bar(Merged_data.index, Merged_data['China'], bottom=Merged_data[['Afghanistan', 'Canada']].sum(axis=1), label='China')
+cc.bar(Merged_data.index, Merged_data['Arabia'], bottom=Merged_data[['Afghanistan', 'Canada', 'China']].sum(axis=1), label='Arabia')
+cc.bar(Merged_data.index, Merged_data['Sweden'], bottom=Merged_data[['Afghanistan', 'Canada', 'China', 'Arabia']].sum(axis=1), label='Sweden')
+cc.set_ylabel('Population in Millions')
+cc.set_xlabel('year')
+cc.set_title('Population Growth in a decade')
+cc.legend()
