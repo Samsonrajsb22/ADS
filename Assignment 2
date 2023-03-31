@@ -183,7 +183,95 @@ Merged_data
 # plt.show()
 
 
+#2nd plot for the primary educational growth 
 
+
+AFE = Pop_Edu[Pop_Edu['TableName'] == 'Afghanistan']
+AFE
+AFE_Edu_sum = AFE[AFE['Indicator Code'] == "SE.ENR.PRSC.FM.ZS"]
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+Edu_data = AFE_Edu_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+Edu_data
+
+AFE_df = Edu_data.T
+AFE_df = AFE_df.rename_axis("YEAR")
+AFE_df
+AfghanistanEdu = AFE_df.rename(columns = {2662: "Afghanistan"})
+AfghanistanEdu
+
+#Canada
+
+
+CAN = Pop_Edu[Pop_Edu['TableName'] == 'Canada']
+CAN
+CAN_pop_sum = CAN[CAN['Indicator Code'] == "SE.ENR.PRSC.FM.ZS"]
+CAN_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+CANPop_data = CAN_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+CANPop_data
+
+CAN_df = CANPop_data.T
+CAN_df = CAN_df.rename_axis("YEAR")
+CAN_df
+CanadaEdu=CAN_df.rename(columns = {2695: "Canada"})
+CanadaEdu
+
+
+#China
+
+
+CHI = Pop_Edu[Pop_Edu['TableName'] == 'China']
+CHI
+CHI_pop_sum = CHI[CHI['Indicator Code'] == "SE.ENR.PRSC.FM.ZS"]
+CHI_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+CHIPop_data = CHI_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+CHIPop_data
+
+CHI_df = CHIPop_data.T
+CHI_df = CHI_df.rename_axis("YEAR")
+CHI_df
+ChinaEdu=CHI_df.rename(columns = {2700: "China"})
+ChinaEdu
+
+#Arabia
+
+AWA = Pop_Edu[Pop_Edu['TableName'] == 'Arab World']
+AWA
+AWA_pop_sum = AWA[AWA['Indicator Code'] == "SE.ENR.PRSC.FM.ZS"]
+AWA_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+AWAPop_data = AWA_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+AWAPop_data
+
+AWA_df = AWAPop_data.T
+AWA_df = AWA_df.rename_axis("YEAR")
+AWA_df
+ArabiaEdu=AWA_df.rename(columns = {2667: "Arabia"})
+ArabiaEdu
+
+#Sweden
+
+SWE = Pop_Edu[Pop_Edu['TableName'] == 'Sweden']
+SWE
+SWE_pop_sum = SWE[SWE['Indicator Code'] == "SE.ENR.PRSC.FM.ZS"]
+SWE_pop_sum
+#AF_pop_sum = pd.DataFrame(AF_pop_sum)
+SWEPop_data = SWE_pop_sum[['2010','2011','2012', '2013', '2014', '2015','2016', '2017', '2018', '2019', '2020', '2021']]
+SWEPop_data
+
+SWE_df = SWEPop_data.T
+SWE_df = SWE_df.rename_axis("YEAR")
+SWE_df
+SwedenEdu=SWE_df.rename(columns = {2883: "Sweden"})
+SwedenEdu
+
+
+Merged_data_Edu = AfghanistanEdu.merge(CanadaEdu, how="outer", on="YEAR") \
+              .merge(ChinaEdu, how="outer", on="YEAR") \
+              .merge(ArabiaEdu, how="outer", on="YEAR") \
+              .merge(SwedenEdu, how="outer", on="YEAR")
+Merged_data_Edu.fillna(0, inplace= True)
 
 
 
