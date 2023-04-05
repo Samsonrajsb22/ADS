@@ -14,7 +14,7 @@ from scipy.stats import skew  # import skew from stats as skew
 from scipy.stats import kurtosis  # import kurtosis from stats as kurtosis
 
 
-#Function to clean the data
+# Function to clean the data
 def clean(a):
     """
     The function fills the missing value with 0.
@@ -34,21 +34,21 @@ def clean(a):
 
 
 # function for stats analysis
-def stats(a):
+def stats(b):
     """
     This function takes a pandas DataFrame `a` and performs several statistical calculations on the columns.
     It prints the summary statistics, correlation matrix, skewness, and kurtosis
     for the selected columns.  """
 
     # extract the columns from the 4th column onward and assign to variable "stats"
-    stats = a.iloc[:, 4:]
+    stats = b.iloc[:, 4:]
 
     # calculate the skewness,kurtosis and Covariance
     print(skew(stats, axis=0, bias=True), kurtosis(
         stats, axis=0, bias=True), stats.describe(), stats.cov())
 
 
-stats(Coun)  # shows the skewness,kurtosis,describe for the dataframe.
+stats(Merged_data)  # shows the skewness,kurtosis,describe for the dataframe.
 
 
 # Reading CSV file
@@ -104,10 +104,8 @@ Coun = ("IND", "BRA", "CAN", "SWE")  # create list of countries
 Coun = Edu[Edu["Country Code"].isin(Coun)]
 Coun  # shows the Coun Dataframe
 
-
 # groupby function
 grouped = Coun.groupby(['Country Code', "Indicator Name"]).mean()
-
 
 # plot bar graph for filtered data
 plt.figure(dpi=300)
@@ -126,11 +124,11 @@ grouped = Coun.groupby('Country Code').sum()
 
 # plot a pie chart for each resource in the dataset
 for col in grouped.columns:
-   plt.figure(dpi=300)
-   grouped[col].plot(
-       kind='pie', title='Total Percentage of Electricity produced', autopct='%1.1f%%')
-   plt.ylabel('Percentage')   # ylabel name
-   plt.show()
+    plt.figure(dpi=300)
+    grouped[col].plot(
+        kind='pie', title='Total Percentage of Electricity produced', autopct='%1.1f%%')
+    plt.ylabel('Percentage')   # ylabel name
+    plt.show()
 
 Ind_list = ("SP.URB.TOTL.IN.ZS", "SP.POP.GROW")  # list for the indicator code
 Pop_Edu = full_data[full_data["Indicator Code"].isin(
@@ -194,9 +192,6 @@ Merged_data_Edu = Ind_df.merge(Br_df, how="outer", on="YEAR") \
     .merge(Ca_df, how="outer", on="YEAR") \
     .merge(Sw_df, how="outer", on="YEAR") \
 
-Merged_data_Edu
-
-
 # create the bar plot
 plt.figure(dpi=300)
 Merged_data_Edu.plot.bar()
@@ -221,6 +216,7 @@ pd.DataFrame(India)
 India
 In = India.drop(['Country Code', 'TableName', 'Indicator Name'], axis=0)
 pd.DataFrame(In)
+
 Ind = In.rename(columns={375: 'SP.URB.TOTL', 907: 'SP.POP.TOTL',
                 1173: 'SP.POP.GROW', 2237: 'SH.DYN.MORT', 15010: 'EG.ELC.ACCS.ZS'})
 Ind.drop(["Indicator Code"], inplace=True)
@@ -231,7 +227,6 @@ Ind.fillna(0)
 Ind['SP.POP.TOTL'] = Ind['SP.POP.TOTL'] / 1000000
 Ind['SP.URB.TOTL'] = Ind['SP.URB.TOTL'] / 1000000
 Ind['SP.POP.GROW'] = Ind['SP.POP.GROW'] * 100
-Ind
 
 # scatter plot to find the strength between population growth and electricty access
 sns.scatterplot(x="SP.POP.TOTL", y="EG.ELC.ACCS.ZS", data=Ind)
@@ -242,49 +237,44 @@ plt.show()
 
 # Statistical operation - standard Deviation for Total population
 Std_Pop = np.std(Ind['SP.POP.TOTL'], ddof=1)
-Std_Pop
 
 # Statistical operation - Variance for Total Population
 Var_Pop = np.var(Ind['SP.POP.TOTL'], ddof=1)
-Var_Pop
 
 # Statistical operation - Standard Deviation for Electricity access
 Std_Ele = np.std(Ind['EG.ELC.ACCS.ZS'], ddof=1)
-Std_Ele
-
 
 # Statistical operation - Variance for Electricity access
 Var_Ele = np.var(Ind['EG.ELC.ACCS.ZS'], ddof=1)
-Var_Ele
 
 # quantile for Population Total
 qua_Pop = np.quantile(Ind['SP.POP.TOTL'], np.linspace(0, 0.50, 4))
-qua_Pop
 
 # quantile for Electricity access
 qua_Ele = np.quantile(Ind['EG.ELC.ACCS.ZS'], np.linspace(0, 0.50, 4))
-qua_Ele
 
 # Boxplot for Total Population in India for the last decade
-plt.figure(dpi=300)
+plt.figure(dpi=300)  # set dpi
 fig, ab = plt.subplots()
-ab.boxplot(Ind['SP.POP.TOTL'])
-ab.set_xticklabels([1])
+ab.boxplot(Ind['SP.POP.TOTL'])  # boxplot for the indicator
+ab.set_xticklabels([1])  # set x ticks to 1
+# title for the box plot
 ab.set_title('Box Plot-Total Population in India for the last decade')
-ab.set_ylabel('India Total Population in Millions')
+ab.set_ylabel('India Total Population in Millions')    # y label
 plt.figure(figsize=(2, 2))
-plt.show()
+plt.show()  # show the figure
 
 # Boxplot for Electricity access
 plt.figure(dpi=300)
-fig, ax = plt.subplots()
-ax.boxplot(Ind['EG.ELC.ACCS.ZS'])
-ax.set_xticklabels([1])
-ax.set_ylabel('Access to Electricity')
-ax.set_title('Box Plot-Electricity Access percentage in last decade')
-ax.axhline(y=qua_Ele[0], color='r', linestyle='-')
-ax.axhline(y=qua_Ele[1], color='y', linestyle='--')
-ax.axhline(y=qua_Ele[2], color='b', linestyle='--')
-ax.axhline(y=qua_Ele[3], color='g', linestyle='-')
+fig, yy = plt.subplots()
+yy.boxplot(Ind['EG.ELC.ACCS.ZS'])  # boxplot for the indicator
+yy.set_xticklabels([1])
+yy.set_ylabel('Access to Electricity')    # set y label
+# title for the box plot
+yy.set_title('Box Plot-Electricity Access percentage in last decade')
+yy.axhline(y=qua_Ele[0], color='r', linestyle='-')   # linestyle 1
+yy.axhline(y=qua_Ele[1], color='y', linestyle='--')  # linestyle 2
+yy.axhline(y=qua_Ele[2], color='b', linestyle='--')  # linestyle 3
+yy.axhline(y=qua_Ele[3], color='g', linestyle='-')   # linestyle 4
 plt.figure(figsize=(2, 2))
-plt.show()
+plt.show()  # show the figure
