@@ -2,6 +2,7 @@
 """
 Created on Fri Mar 24 17:45:18 2023
 
+ADS- 1 - Assignment 2 -Visualization
 @author: Samson Raj Babu Raj - 22013145
 """
 
@@ -46,9 +47,6 @@ def stats(b):
     # calculate the skewness,kurtosis and Covariance
     print(skew(stats, axis=0, bias=True), kurtosis(
         stats, axis=0, bias=True), stats.describe(), stats.cov())
-
-
-stats(Merged_data)  # shows the skewness,kurtosis,describe for the dataframe.
 
 
 # Reading CSV file
