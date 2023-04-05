@@ -226,6 +226,9 @@ Ind['SP.POP.TOTL'] = Ind['SP.POP.TOTL'] / 1000000
 Ind['SP.URB.TOTL'] = Ind['SP.URB.TOTL'] / 1000000
 Ind['SP.POP.GROW'] = Ind['SP.POP.GROW'] * 100
 
+#describe method -statstical function
+Ind.describe()
+
 # scatter plot to find the strength between population growth and electricty access
 sns.scatterplot(x="SP.POP.TOTL", y="EG.ELC.ACCS.ZS", data=Ind)
 plt.xlabel("India's Total Population(in Millions)")
